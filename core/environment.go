@@ -129,6 +129,7 @@ func environmentSetCoreOptionsIntl(data unsafe.Pointer) bool {
 	return true
 }
 
+// This is what is called when the libretro core invokes the callback set in retro_set_environment
 func environment(cmd uint32, data unsafe.Pointer) bool {
 	switch cmd {
 	case libretro.EnvironmentSetRotation:

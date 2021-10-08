@@ -426,45 +426,45 @@ func Load(sofile string) (*Core, error) {
 		return nil, err
 	}
 
-	core.symRetroInit = DlSym(core.handle, "retro_init")
-	core.symRetroDeinit = DlSym(core.handle, "retro_deinit")
-	core.symRetroAPIVersion = DlSym(core.handle, "retro_api_version")
-	core.symRetroGetSystemInfo = DlSym(core.handle, "retro_get_system_info")
-	core.symRetroGetSystemAVInfo = DlSym(core.handle, "retro_get_system_av_info")
-	core.symRetroSetEnvironment = DlSym(core.handle, "retro_set_environment")
-	core.symRetroSetVideoRefresh = DlSym(core.handle, "retro_set_video_refresh")
-	core.symRetroSetControllerPortDevice = DlSym(core.handle, "retro_set_controller_port_device")
-	core.symRetroSetInputPoll = DlSym(core.handle, "retro_set_input_poll")
-	core.symRetroSetInputState = DlSym(core.handle, "retro_set_input_state")
-	core.symRetroSetAudioSample = DlSym(core.handle, "retro_set_audio_sample")
-	core.symRetroSetAudioSampleBatch = DlSym(core.handle, "retro_set_audio_sample_batch")
-	core.symRetroRun = DlSym(core.handle, "retro_run")
-	core.symRetroReset = DlSym(core.handle, "retro_reset")
-	core.symRetroLoadGame = DlSym(core.handle, "retro_load_game")
-	core.symRetroUnloadGame = DlSym(core.handle, "retro_unload_game")
-	core.symRetroSerializeSize = DlSym(core.handle, "retro_serialize_size")
-	core.symRetroSerialize = DlSym(core.handle, "retro_serialize")
-	core.symRetroUnserialize = DlSym(core.handle, "retro_unserialize")
-	core.symRetroGetMemorySize = DlSym(core.handle, "retro_get_memory_size")
-	core.symRetroGetMemoryData = DlSym(core.handle, "retro_get_memory_data")
+	core.SymRetroInit = DlSym(core.handle, "retro_init")
+	core.SymRetroDeinit = DlSym(core.handle, "retro_deinit")
+	core.SymRetroAPIVersion = DlSym(core.handle, "retro_api_version")
+	core.SymRetroGetSystemInfo = DlSym(core.handle, "retro_get_system_info")
+	core.SymRetroGetSystemAVInfo = DlSym(core.handle, "retro_get_system_av_info")
+	core.SymRetroSetEnvironment = DlSym(core.handle, "retro_set_environment")
+	core.SymRetroSetVideoRefresh = DlSym(core.handle, "retro_set_video_refresh")
+	core.SymRetroSetControllerPortDevice = DlSym(core.handle, "retro_set_controller_port_device")
+	core.SymRetroSetInputPoll = DlSym(core.handle, "retro_set_input_poll")
+	core.SymRetroSetInputState = DlSym(core.handle, "retro_set_input_state")
+	core.SymRetroSetAudioSample = DlSym(core.handle, "retro_set_audio_sample")
+	core.SymRetroSetAudioSampleBatch = DlSym(core.handle, "retro_set_audio_sample_batch")
+	core.SymRetroRun = DlSym(core.handle, "retro_run")
+	core.SymRetroReset = DlSym(core.handle, "retro_reset")
+	core.SymRetroLoadGame = DlSym(core.handle, "retro_load_game")
+	core.SymRetroUnloadGame = DlSym(core.handle, "retro_unload_game")
+	core.SymRetroSerializeSize = DlSym(core.handle, "retro_serialize_size")
+	core.SymRetroSerialize = DlSym(core.handle, "retro_serialize")
+	core.SymRetroUnserialize = DlSym(core.handle, "retro_unserialize")
+	core.SymRetroGetMemorySize = DlSym(core.handle, "retro_get_memory_size")
+	core.SymRetroGetMemoryData = DlSym(core.handle, "retro_get_memory_data")
 
 	return &core, nil
 }
 
 // Init takes care of the library global initialization
 func (core *Core) Init() {
-	C.bridge_retro_init(core.symRetroInit)
+	C.bridge_retro_init(core.SymRetroInit)
 }
 
 // APIVersion returns the RETRO_API_VERSION.
 // Used to validate ABI compatibility when the API is revised.
 func (core *Core) APIVersion() uint {
-	return uint(C.bridge_retro_api_version(core.symRetroAPIVersion))
+	return uint(C.bridge_retro_api_version(core.SymRetroAPIVersion))
 }
 
 // Deinit takes care of the library global deinitialization
 func (core *Core) Deinit() {
-	C.bridge_retro_deinit(core.symRetroDeinit)
+	C.bridge_retro_deinit(core.SymRetroDeinit)
 	DlClose(core.handle)
 	core.MemoryMap = nil
 	environment = nil
@@ -484,12 +484,12 @@ func (core *Core) Deinit() {
 // a frame if GET_CAN_DUPE returns true.
 // In this case, the video callback can take a NULL argument for data.
 func (core *Core) Run() {
-	C.bridge_retro_run(core.symRetroRun)
+	C.bridge_retro_run(core.SymRetroRun)
 }
 
 // Reset resets the current game.
 func (core *Core) Reset() {
-	C.bridge_retro_reset(core.symRetroReset)
+	C.bridge_retro_reset(core.SymRetroReset)
 }
 
 // GetSystemInfo returns statically known system info. Pointers provided in *info
@@ -497,7 +497,7 @@ func (core *Core) Reset() {
 // Can be called at any time, even before retro_init().
 func (core *Core) GetSystemInfo() SystemInfo {
 	rsi := C.struct_retro_system_info{}
-	C.bridge_retro_get_system_info(core.symRetroGetSystemInfo, &rsi)
+	C.bridge_retro_get_system_info(core.SymRetroGetSystemInfo, &rsi)
 	return SystemInfo{
 		LibraryName:     C.GoString(rsi.library_name),
 		LibraryVersion:  C.GoString(rsi.library_version),
@@ -515,7 +515,7 @@ func (core *Core) GetSystemInfo() SystemInfo {
 // desire a particular aspect ratio.
 func (core *Core) GetSystemAVInfo() SystemAVInfo {
 	avi := C.struct_retro_system_av_info{}
-	C.bridge_retro_get_system_av_info(core.symRetroGetSystemAVInfo, &avi)
+	C.bridge_retro_get_system_av_info(core.SymRetroGetSystemAVInfo, &avi)
 	return SystemAVInfo{
 		Geometry: GameGeometry{
 			AspectRatio: float64(avi.geometry.aspect_ratio),
@@ -537,7 +537,7 @@ func (core *Core) LoadGame(gi GameInfo) bool {
 	rgi.path = C.CString(gi.Path)
 	rgi.size = C.size_t(gi.Size)
 	rgi.data = gi.Data
-	return bool(C.bridge_retro_load_game(core.symRetroLoadGame, &rgi))
+	return bool(C.bridge_retro_load_game(core.SymRetroLoadGame, &rgi))
 }
 
 // SerializeSize returns the amount of data the implementation requires to serialize
@@ -546,13 +546,13 @@ func (core *Core) LoadGame(gi GameInfo) bool {
 // returned size is never allowed to be larger than a previous returned
 // value, to ensure that the frontend can allocate a save state buffer once.
 func (core *Core) SerializeSize() uint {
-	return uint(C.bridge_retro_serialize_size(core.symRetroSerializeSize))
+	return uint(C.bridge_retro_serialize_size(core.SymRetroSerializeSize))
 }
 
 // Serialize serializes internal state and returns the state as a byte slice.
 func (core *Core) Serialize(size uint) ([]byte, error) {
 	data := C.malloc(C.size_t(size))
-	ok := bool(C.bridge_retro_serialize(core.symRetroSerialize, data, C.size_t(size)))
+	ok := bool(C.bridge_retro_serialize(core.SymRetroSerialize, data, C.size_t(size)))
 	if !ok {
 		return nil, errors.New("retro_serialize failed")
 	}
@@ -565,7 +565,7 @@ func (core *Core) Unserialize(bytes []byte, size uint) error {
 	if size == 0 || len(bytes) == 0 {
 		return errors.New("retro_unserialize failed")
 	}
-	ok := bool(C.bridge_retro_unserialize(core.symRetroUnserialize, unsafe.Pointer(&bytes[0]), C.size_t(size)))
+	ok := bool(C.bridge_retro_unserialize(core.SymRetroUnserialize, unsafe.Pointer(&bytes[0]), C.size_t(size)))
 	if !ok {
 		return errors.New("retro_unserialize failed")
 	}
@@ -574,49 +574,49 @@ func (core *Core) Unserialize(bytes []byte, size uint) error {
 
 // UnloadGame unloads a currently loaded game
 func (core *Core) UnloadGame() {
-	C.bridge_retro_unload_game(core.symRetroUnloadGame)
+	C.bridge_retro_unload_game(core.SymRetroUnloadGame)
 }
 
 // SetEnvironment sets the environment callback.
 // Must be called before Init
 func (core *Core) SetEnvironment(f environmentFunc) {
 	environment = f
-	C.bridge_retro_set_environment(core.symRetroSetEnvironment, C.coreEnvironment_cgo)
+	C.bridge_retro_set_environment(core.SymRetroSetEnvironment, C.coreEnvironment_cgo)
 }
 
 // SetVideoRefresh sets the video refresh callback.
 // Must be set before the first Run call
 func (core *Core) SetVideoRefresh(f videoRefreshFunc) {
 	videoRefresh = f
-	C.bridge_retro_set_video_refresh(core.symRetroSetVideoRefresh, C.coreVideoRefresh_cgo)
+	C.bridge_retro_set_video_refresh(core.SymRetroSetVideoRefresh, C.coreVideoRefresh_cgo)
 }
 
 // SetAudioSample sets the audio sample callback.
 // Must be set before the first Run call
 func (core *Core) SetAudioSample(f audioSampleFunc) {
 	audioSample = f
-	C.bridge_retro_set_audio_sample(core.symRetroSetAudioSample, C.coreAudioSample_cgo)
+	C.bridge_retro_set_audio_sample(core.SymRetroSetAudioSample, C.coreAudioSample_cgo)
 }
 
 // SetAudioSampleBatch sets the audio sample batch callback.
 // Must be set before the first Run call
 func (core *Core) SetAudioSampleBatch(f audioSampleBatchFunc) {
 	audioSampleBatch = f
-	C.bridge_retro_set_audio_sample_batch(core.symRetroSetAudioSampleBatch, C.coreAudioSampleBatch_cgo)
+	C.bridge_retro_set_audio_sample_batch(core.SymRetroSetAudioSampleBatch, C.coreAudioSampleBatch_cgo)
 }
 
 // SetInputPoll sets the input poll callback.
 // Must be set before the first Run call
 func (core *Core) SetInputPoll(f inputPollFunc) {
 	inputPoll = f
-	C.bridge_retro_set_input_poll(core.symRetroSetInputPoll, C.coreInputPoll_cgo)
+	C.bridge_retro_set_input_poll(core.SymRetroSetInputPoll, C.coreInputPoll_cgo)
 }
 
 // SetInputState sets the input state callback.
 // Must be set before the first Run call
 func (core *Core) SetInputState(f inputStateFunc) {
 	inputState = f
-	C.bridge_retro_set_input_state(core.symRetroSetInputState, C.coreInputState_cgo)
+	C.bridge_retro_set_input_state(core.SymRetroSetInputState, C.coreInputState_cgo)
 }
 
 // BindLogCallback binds f to the log callback
@@ -635,7 +635,7 @@ func (core *Core) BindPerfCallback(data unsafe.Pointer, f getTimeUsecFunc) {
 
 // SetControllerPortDevice sets the device type attached to a controller port
 func (core *Core) SetControllerPortDevice(port uint, device uint32) {
-	C.bridge_retro_set_controller_port_device(core.symRetroSetControllerPortDevice, C.unsigned(port), C.unsigned(device))
+	C.bridge_retro_set_controller_port_device(core.SymRetroSetControllerPortDevice, C.unsigned(port), C.unsigned(device))
 }
 
 //export coreEnvironment
@@ -880,13 +880,13 @@ func (core *Core) SetAudioCallback(data unsafe.Pointer) {
 // GetMemorySize returns the size of a region of the memory.
 // See memory constants.
 func (core *Core) GetMemorySize(id uint32) uint {
-	return uint(C.bridge_retro_get_memory_size(core.symRetroGetMemorySize, C.unsigned(id)))
+	return uint(C.bridge_retro_get_memory_size(core.SymRetroGetMemorySize, C.unsigned(id)))
 }
 
 // GetMemoryData returns the size of a region of the memory.
 // See memory constants.
 func (core *Core) GetMemoryData(id uint32) unsafe.Pointer {
-	return C.bridge_retro_get_memory_data(core.symRetroGetMemoryData, C.unsigned(id))
+	return C.bridge_retro_get_memory_data(core.SymRetroGetMemoryData, C.unsigned(id))
 }
 
 // DiskControlCallback is an interface which frontend can use to eject and insert disk images

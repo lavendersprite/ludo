@@ -6,27 +6,27 @@ import "unsafe"
 type Core struct {
 	handle DlHandle
 
-	symRetroInit                    unsafe.Pointer
-	symRetroDeinit                  unsafe.Pointer
-	symRetroAPIVersion              unsafe.Pointer
-	symRetroGetSystemInfo           unsafe.Pointer
-	symRetroGetSystemAVInfo         unsafe.Pointer
-	symRetroSetEnvironment          unsafe.Pointer
-	symRetroSetVideoRefresh         unsafe.Pointer
-	symRetroSetControllerPortDevice unsafe.Pointer
-	symRetroSetInputPoll            unsafe.Pointer
-	symRetroSetInputState           unsafe.Pointer
-	symRetroSetAudioSample          unsafe.Pointer
-	symRetroSetAudioSampleBatch     unsafe.Pointer
-	symRetroRun                     unsafe.Pointer
-	symRetroReset                   unsafe.Pointer
-	symRetroLoadGame                unsafe.Pointer
-	symRetroUnloadGame              unsafe.Pointer
-	symRetroSerializeSize           unsafe.Pointer
-	symRetroSerialize               unsafe.Pointer
-	symRetroUnserialize             unsafe.Pointer
-	symRetroGetMemorySize           unsafe.Pointer
-	symRetroGetMemoryData           unsafe.Pointer
+	SymRetroInit                    unsafe.Pointer
+	SymRetroDeinit                  unsafe.Pointer
+	SymRetroAPIVersion              unsafe.Pointer
+	SymRetroGetSystemInfo           unsafe.Pointer
+	SymRetroGetSystemAVInfo         unsafe.Pointer
+	SymRetroSetEnvironment          unsafe.Pointer
+	SymRetroSetVideoRefresh         unsafe.Pointer
+	SymRetroSetControllerPortDevice unsafe.Pointer
+	SymRetroSetInputPoll            unsafe.Pointer
+	SymRetroSetInputState           unsafe.Pointer
+	SymRetroSetAudioSample          unsafe.Pointer
+	SymRetroSetAudioSampleBatch     unsafe.Pointer
+	SymRetroRun                     unsafe.Pointer
+	SymRetroReset                   unsafe.Pointer
+	SymRetroLoadGame                unsafe.Pointer
+	SymRetroUnloadGame              unsafe.Pointer
+	SymRetroSerializeSize           unsafe.Pointer
+	SymRetroSerialize               unsafe.Pointer
+	SymRetroUnserialize             unsafe.Pointer
+	SymRetroGetMemorySize           unsafe.Pointer
+	SymRetroGetMemoryData           unsafe.Pointer
 
 	AudioCallback       *AudioCallback
 	FrameTimeCallback   *FrameTimeCallback

@@ -13,6 +13,7 @@ import (
 	"github.com/libretro/ludo/core"
 	"github.com/libretro/ludo/history"
 	"github.com/libretro/ludo/input"
+	"github.com/libretro/ludo/libretro_script"
 	"github.com/libretro/ludo/menu"
 	ntf "github.com/libretro/ludo/notifications"
 	"github.com/libretro/ludo/playlists"
@@ -98,9 +99,14 @@ func main() {
 	flag.Parse()
 	args := flag.Args()
 
+	var scriptPaths []string
 	var gamePath string
 	if len(args) > 0 {
 		gamePath = args[0]
+
+		// FIXME: lua scripts should be passed as flags, not positional.
+		// ex: -S somescript.lua -S somescript2.lua
+		scriptPaths = args[1:]
 	}
 
 	if err := glfw.Init(); err != nil {
@@ -141,6 +147,11 @@ func main() {
 		} else {
 			ntf.DisplayAndLog(ntf.Error, "Menu", err.Error())
 		}
+	}
+
+	// load scripts
+	for _, scriptPath := range scriptPaths {
+		libretro_script.LoadScript(scriptPath)
 	}
 
 	// No game running? display the menu

@@ -35,9 +35,11 @@ ifeq ($(OS), Windows)
 endif
 
 ludo:
+	(cd libretro_script/libretro_script && make lib)
 	go build
 
 ludo.exe:
+	(cd libretro_script/libretro_script && make lib)
 	go build -ldflags '-H=windowsgui'
 
 cores/%_libretro.dylib cores/%_libretro.dll cores/%_libretro.so:

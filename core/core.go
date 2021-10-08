@@ -15,6 +15,7 @@ import (
 	"github.com/libretro/ludo/audio"
 	"github.com/libretro/ludo/input"
 	"github.com/libretro/ludo/libretro"
+	"github.com/libretro/ludo/libretro_script"
 	"github.com/libretro/ludo/options"
 	"github.com/libretro/ludo/patch"
 	"github.com/libretro/ludo/savefiles"
@@ -47,6 +48,9 @@ func Load(sofile string) error {
 	if err != nil {
 		return err
 	}
+
+	libretro_script.Init()
+
 	state.Core.SetEnvironment(environment)
 	state.Core.Init()
 	state.Core.SetVideoRefresh(vid.Refresh)
