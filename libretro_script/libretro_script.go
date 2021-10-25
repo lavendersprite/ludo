@@ -24,6 +24,8 @@ func free(cs *C.char) {
 }
 
 func Init() {
+	C.retro_script_init()
+
 	// allow libretro_script to intercept core functions
 	state.Core.SymRetroSetEnvironment = unsafe.Pointer(
 		C.retro_script_intercept_retro_set_environment(fptr(state.Core.SymRetroSetEnvironment)),
@@ -34,19 +36,61 @@ func Init() {
 	state.Core.SymRetroGetMemoryData = unsafe.Pointer(
 		C.retro_script_intercept_retro_get_memory_data(fptr(state.Core.SymRetroGetMemoryData)),
 	)
+	state.Core.SymRetroInit = unsafe.Pointer(
+		C.retro_script_intercept_retro_init(fptr(state.Core.SymRetroInit)),
+	)
+	state.Core.SymRetroDeinit = unsafe.Pointer(
+		C.retro_script_intercept_retro_deinit(fptr(state.Core.SymRetroDeinit)),
+	)
 	state.Core.SymRetroRun = unsafe.Pointer(
 		C.retro_script_intercept_retro_run(fptr(state.Core.SymRetroRun)),
 	)
 }
 
+func Deinit() {
+	C.retro_script_deinit()
+}
+
 func LoadScript(scriptPath string) {
 	cs := C.CString(scriptPath)
 	defer free(cs)
-	handle := int(C.retro_script_load(cs))
+	handle := int(C.retro_script_load_lua(cs))
 	if handle == 0 {
 		fmt.Printf("retro_script error occurred: ", C.GoString(C.retro_script_get_error()), "\n")
 	}
 }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
  
  
