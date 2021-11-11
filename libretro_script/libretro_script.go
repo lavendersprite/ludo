@@ -45,6 +45,12 @@ func Init() {
 	state.Core.SymRetroRun = unsafe.Pointer(
 		C.retro_script_intercept_retro_run(fptr(state.Core.SymRetroRun)),
 	)
+	state.Core.SymRetroSetInputPoll = unsafe.Pointer(
+		C.retro_script_intercept_retro_set_input_poll(fptr(state.Core.SymRetroSetInputPoll)),
+	)
+	state.Core.SymRetroSetInputState = unsafe.Pointer(
+		C.retro_script_intercept_retro_set_input_state(fptr(state.Core.SymRetroSetInputState)),
+	)
 }
 
 func Deinit() {
@@ -59,38 +65,3 @@ func LoadScript(scriptPath string) {
 		fmt.Printf("retro_script error occurred: ", C.GoString(C.retro_script_get_error()), "\n")
 	}
 }
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
